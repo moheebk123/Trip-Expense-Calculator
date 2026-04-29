@@ -11,6 +11,7 @@ interface Expense {
   title: string;
   amount: number;
   participants: number[];
+  day: number;
 }
 
 function ExpenseMembers({ expense }: { expense: Expense }) {

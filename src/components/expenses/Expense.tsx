@@ -21,10 +21,11 @@ interface ExpenseInterface {
   title: string;
   amount: number;
   participants: number[];
+  day: number;
 }
 
 function Expense({ expense }: { expense: ExpenseInterface }) {
-  const { changeExpense } = useContext(ExpenseContext);
+  const { days, changeExpense } = useContext(ExpenseContext);
 
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const [newExpense, setNewExpense] = useState<ExpenseInterface>(expense);
@@ -38,7 +39,7 @@ function Expense({ expense }: { expense: ExpenseInterface }) {
     setIsEditing(false);
   };
 
-  const handleChange = (field: "amount" | "title", value: string | number) => {
+  const handleChange = (field: "amount" | "title" | "day", value: string | number) => {
     setNewExpense((prev) => ({ ...prev, [field]: value }));
   };
 
@@ -46,6 +47,26 @@ function Expense({ expense }: { expense: ExpenseInterface }) {
     <div className="flex items-center justify-between">
       {isEditing ? (
         <div className="space-y-2 py-2">
+          <Select
+            value={String(newExpense.day)}
+            onValueChange={(e) => handleChange("day", Number(e))}
+          >
+            <SelectTrigger className="w-full max-w-48">
+              <SelectValue placeholder="Select expense day" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectGroup>
+                <SelectLabel>Day</SelectLabel>
+                {days.map(
+                  (day, index) => (
+                    <SelectItem key={day} value={String(day)}>
+                      Day {index + 1}
+                    </SelectItem>
+                  ),
+                )}
+              </SelectGroup>
+            </SelectContent>
+          </Select>
           <Select
             value={newExpense.title}
             onValueChange={(e) => handleChange("title", e)}

@@ -25,24 +25,33 @@ import {
 import { Plus } from "lucide-react";
 
 function AddExpense() {
-  const { persons, changeExpense } = useContext(ExpenseContext);
+  const { persons, days, changeExpense } = useContext(ExpenseContext);
 
   const [selectedExpense, setSelectedExpense] = useState<string>("");
+  const [selectedDay, setSelectedDay] = useState<number>(0);
   const [expenseAmount, setExpenseAmount] = useState<number>(0);
   const [selectedPersons, setSelectedPersons] = useState<number[]>([]);
 
   const handleAddExpense = (e: SyntheticEvent) => {
     e.preventDefault();
-    if (!selectedPersons.length || !selectedExpense || !expenseAmount) return;
+    if (
+      !selectedPersons.length ||
+      !selectedDay ||
+      !selectedExpense ||
+      !expenseAmount
+    )
+      return;
 
     changeExpense("add", undefined, {
       id: Date.now(),
       title: selectedExpense,
       amount: expenseAmount,
       participants: selectedPersons,
+      day: selectedDay,
     });
 
     setSelectedExpense("");
+    setSelectedDay(0);
     setExpenseAmount(0);
     setSelectedPersons([]);
   };
@@ -61,6 +70,26 @@ function AddExpense() {
       className="mt-3 bg-white/5 backdrop-blur-md border border-white/10 rounded-2xl p-6 shadow-lg space-y-5"
     >
       <h2 className="text-lg font-semibold mb-4">Add Expense</h2>
+
+      {/* Expense Day */}
+      <Select
+        value={String(selectedDay)}
+        onValueChange={(e) => setSelectedDay(Number(e))}
+      >
+        <SelectTrigger className="w-full max-w-48">
+          <SelectValue placeholder="Select expense day" />
+        </SelectTrigger>
+        <SelectContent>
+          <SelectGroup>
+            <SelectLabel>Day</SelectLabel>
+            {days.map((day, index) => (
+              <SelectItem key={day} value={String(day)}>
+                Day {index + 1}
+              </SelectItem>
+            ))}
+          </SelectGroup>
+        </SelectContent>
+      </Select>
 
       {/* Expense Name */}
       <Select
