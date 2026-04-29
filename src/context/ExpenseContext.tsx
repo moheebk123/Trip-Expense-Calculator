@@ -10,12 +10,14 @@ interface Expense {
   title: string;
   amount: number;
   participants: number[];
+  day: number;
 }
 
 interface ExpenseContextType {
-  persons: Person[];
   perPersonExpense: number;
+  persons: Person[];
   expenses: Expense[];
+  days: number[];
 
   changePerPersonExpense: (newPerPersonExpense: number) => void;
   changePerson: (
@@ -28,21 +30,29 @@ interface ExpenseContextType {
     expenseId?: number,
     data?: Expense,
   ) => void;
+  changeDay: (
+    action: "add" | "remove" | "edit",
+    dayId?: number,
+    data?: number,
+  ) => void;
 }
 
 export const ExpenseContext = createContext<ExpenseContextType>({
-  persons: [],
   perPersonExpense: 0,
+  persons: [],
   expenses: [],
+  days: [],
   //   expenses: [
   //     {
   //       id: 1,
   //       title: "Lunch",
   //       amount: 0,
   //       participants: [1]
+  //       day: 1
   //     }
   //   ]
   changePerPersonExpense: () => {},
   changePerson: () => {},
   changeExpense: () => {},
+  changeDay: () => {},
 });

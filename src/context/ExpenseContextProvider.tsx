@@ -11,12 +11,14 @@ interface Expense {
   title: string;
   amount: number;
   participants: number[];
+  day: number;
 }
 
 function ExpenseContextProvider({ children }: { children: ReactNode }) {
   const [perPersonExpense, setPerPersonExpense] = useState<number>(0);
   const [persons, setPersons] = useState<Person[]>([]);
   const [expenses, setExpenses] = useState<Expense[]>([]);
+  const [days, setDays] = useState<number[]>([]);
 
   const changePerPersonExpense = (newPerPersonExpense: number) =>
     setPerPersonExpense(newPerPersonExpense);
@@ -76,15 +78,32 @@ function ExpenseContextProvider({ children }: { children: ReactNode }) {
     }
   };
 
+  const changeDay = (
+    action: "add" | "remove" | "edit",
+    dayId?: number,
+    data?: number,
+  ) => {
+    if (action === "add") {
+      setDays((prev) => [...prev, data ? data : Date.now()]);
+    } else if (action === "remove" && dayId) {
+      setDays((prev) => prev.filter((day) => day !== dayId));
+      setExpenses((prev) => prev.filter((expense) => expense.day !== dayId));
+    } else {
+      alert("Invalid day change action!");
+    }
+  };
+
   return (
     <ExpenseContext.Provider
       value={{
         persons,
         perPersonExpense,
         expenses,
+        days,
         changePerPersonExpense,
         changePerson,
         changeExpense,
+        changeDay,
       }}
     >
       {children}
