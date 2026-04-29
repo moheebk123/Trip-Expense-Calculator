@@ -1,10 +1,20 @@
-import { useContext } from "react";
+import { useContext, useState } from "react";
 
 import { ExpenseContext } from "@/context/ExpenseContext";
 
 import { Button } from "../ui/button";
+import { Input } from "../ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
-import { Trash2 } from "lucide-react";
+import { Check, Pencil, Trash2 } from "lucide-react";
 
 interface ExpenseInterface {
   id: number;
@@ -16,26 +26,86 @@ interface ExpenseInterface {
 function Expense({ expense }: { expense: ExpenseInterface }) {
   const { changeExpense } = useContext(ExpenseContext);
 
-  const handleRemoveMeal = () => {
+  const [isEditing, setIsEditing] = useState<boolean>(false);
+  const [newExpense, setNewExpense] = useState<ExpenseInterface>(expense);
+
+  const handleRemoveExpense = () => {
     changeExpense("remove", expense.id, undefined);
+  };
+
+  const handleEditExpense = () => {
+    changeExpense("edit", expense.id, newExpense);
+    setIsEditing(false);
+  };
+
+  const handleChange = (field: "amount" | "title", value: string | number) => {
+    setNewExpense((prev) => ({ ...prev, [field]: value }));
   };
 
   return (
     <div className="flex items-center justify-between">
-      <span className="text-base">
-        {expense.title[0].toUpperCase() + expense.title.slice(1)} (₹
-        {expense.amount})
-      </span>
+      {isEditing ? (
+        <div className="space-y-2 py-2">
+          <Select
+            value={newExpense.title}
+            onValueChange={(e) => handleChange("title", e)}
+          >
+            <SelectTrigger className="w-full max-w-48">
+              <SelectValue placeholder="Select an expense" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectGroup>
+                <SelectLabel>Expense</SelectLabel>
+                {["Travel", "Breakfast", "Lunch", "Snack", "Dinner"].map(
+                  (expense) => (
+                    <SelectItem key={expense} value={expense}>
+                      {expense}
+                    </SelectItem>
+                  ),
+                )}
+              </SelectGroup>
+            </SelectContent>
+          </Select>
+          <Input
+            className="h-8 text-base"
+            placeholder="Enter expense amount..."
+            type="text"
+            value={newExpense.amount}
+            onChange={(e) => handleChange("amount", Number(e.target.value))}
+          />
+        </div>
+      ) : (
+        <span className="text-base">
+          {newExpense.title[0].toUpperCase() + newExpense.title.slice(1)} (₹
+          {newExpense.amount})
+        </span>
+      )}
 
-      {/* Delete */}
-      <Button
-        size="icon"
-        variant="ghost"
-        className="hover:bg-red-500/20 text-red-400"
-        onClick={() => handleRemoveMeal()}
-      >
-        <Trash2 size={16} />
-      </Button>
+      <div className="flex items-center gap-2 ml-2">
+        {/* Edit */}
+        <Button
+          size="icon"
+          variant="ghost"
+          className="hover:bg-slate-700"
+          onClick={
+            isEditing
+              ? () => handleEditExpense()
+              : () => setIsEditing(() => true)
+          }
+        >
+          {isEditing ? <Check size={16} /> : <Pencil size={16} />}
+        </Button>
+
+        {/* Delete */}
+        <Button
+          size="icon"
+          variant="ghost"
+          className="hover:bg-red-500/20 text-red-400"
+          onClick={handleRemoveExpense}
+        >
+          <Trash2 size={16} />
+        </Button>
+      </div>
     </div>
   );
 }

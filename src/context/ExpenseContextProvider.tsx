@@ -31,8 +31,10 @@ function ExpenseContextProvider({ children }: { children: ReactNode }) {
         (person) =>
           person.name.toLowerCase() === personName.toLocaleLowerCase(),
       );
-      if (isPersonAdded)
+      if (isPersonAdded) {
         alert("Person already present, add person with different name.");
+        return;
+      }
 
       setPersons((prev) => [
         ...prev,
@@ -62,7 +64,7 @@ function ExpenseContextProvider({ children }: { children: ReactNode }) {
           expense.id === expenseId
             ? {
                 ...expense,
-                data,
+                ...data,
               }
             : expense,
         ),
