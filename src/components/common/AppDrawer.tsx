@@ -56,50 +56,52 @@ function AppDrawer() {
         </DrawerHeader>
 
         {/* Menu */}
-        <div className="px-4 py-5 space-y-6">
-          {drawerItems.map((menu) => (
-            <div key={menu.id} className="space-y-3">
-              <h3 className="text-sm font-medium text-slate-400 uppercase tracking-wider">
-                {menu.menuHeading}
-              </h3>
+        <div className="flex-1 overflow-y-auto px-4">
+          <div className="space-y-6 px-4 py-5  w-full max-w-lg mx-auto p-3">
+            {drawerItems.map((menu) => (
+              <div key={menu.id} className="space-y-3">
+                <h3 className="text-sm font-medium text-slate-400 uppercase tracking-wider">
+                  {menu.menuHeading}
+                </h3>
 
-              <div className="space-y-2">
-                {menu.menuItems.map((item) => {
-                  const Icon = item.icon;
+                <div className="space-y-2">
+                  {menu.menuItems.map((item) => {
+                    const Icon = item.icon;
 
-                  return (
-                    <DrawerTrigger asChild>
-                      <Link
-                        key={item.id}
-                        to={item.url}
-                        className="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-white/5 transition"
-                      >
-                        <Icon size={18} />
-                        <span>{item.title}</span>
-                      </Link>
-                    </DrawerTrigger>
-                  );
-                })}
-                {menu.menuHeading === "Travel" && trips.length > 0 ? (
-                  trips.map((trip) => (
-                    <div key={trip.id} className="ml-5">
+                    return (
                       <DrawerTrigger asChild>
                         <Link
-                          to={`/trips/${trip.id}`}
+                          key={item.id}
+                          to={item.url}
                           className="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-white/5 transition"
                         >
-                          <SquareArrowOutUpRight size={18} />
-                          <span>{trip.title}</span>
+                          <Icon size={18} />
+                          <span>{item.title}</span>
                         </Link>
                       </DrawerTrigger>
-                    </div>
-                  ))
-                ) : (
-                  <></>
-                )}
+                    );
+                  })}
+                  {menu.menuHeading === "Travel" && trips.length > 0 ? (
+                    trips.map((trip) => (
+                      <div key={trip.id} className="ml-5">
+                        <DrawerTrigger asChild>
+                          <Link
+                            to={`/trips/${trip.id}`}
+                            className="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-white/5 transition"
+                          >
+                            <SquareArrowOutUpRight size={18} />
+                            <span>{trip.title}</span>
+                          </Link>
+                        </DrawerTrigger>
+                      </div>
+                    ))
+                  ) : (
+                    <></>
+                  )}
+                </div>
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
 
         {/* Footer */}

@@ -225,7 +225,7 @@ function EditExpense({
     <Drawer open={open} onOpenChange={onClose}>
       <DrawerContent className="bg-slate-950 text-white border-white/10 max-h-[90vh]">
         <DrawerHeader className="border-b border-white/10 pb-5">
-          <DrawerTitle className="text-lg font-bold text-w*hite">
+          <DrawerTitle className="text-lg font-bold text-white">
             Edit Expense
           </DrawerTitle>
           <DrawerDescription>Update expense details</DrawerDescription>
