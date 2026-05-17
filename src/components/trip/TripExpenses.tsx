@@ -430,9 +430,9 @@ function Expense({
                   {expense.title} (₹{expense.amount})
                 </h3>
 
-                <p className="text-sm text-slate-400">
+                {!expense.paidBy && !expense.paidAmount ? <></> : <p className="text-sm text-slate-400">
                   Paid By: {expense.paidBy?.name} (₹{expense.paidAmount})
-                </p>
+                </p>}
               </div>
             </div>
           </AccordionTrigger>
